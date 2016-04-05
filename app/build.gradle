@@ -1,0 +1,84 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            url 'https://maven.fabric.io/public'
+        }
+//        maven {
+//            url 'https://oss.sonatype.org/content/repositories/snapshots/'
+//        }
+    }
+
+    dependencies {
+        classpath 'com.neenbedankt.gradle.plugins:android-apt:' + project["android_apt"]
+//        classpath 'net.ltgt.gradle:gradle-errorprone-plugin:latest.release'
+//        classpath 'io.fabric.tools:gradle:1.21.4'
+    }
+}
+
+apply plugin: 'com.android.application'
+apply plugin: 'android-apt'
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.3"
+
+    defaultConfig {
+        applicationId "com.qyl.ten"
+        minSdkVersion 15
+        targetSdkVersion 23
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+
+        debug {
+            minifyEnabled false
+            debuggable true
+            jniDebuggable true
+            //http://api.shigeten.net/
+
+            buildConfigField "String", "API_HOST", "\"http://api.shigeten.net/\""
+        }
+
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'com.android.support:appcompat-v7:23.1.0'
+
+    compile 'com.android.support:recyclerview-v7:' + project["support"]
+    compile 'com.android.support:support-v4:' + project["support"]
+    compile 'com.android.support:appcompat-v7:' + project["support"]
+    compile 'com.android.support:gridlayout-v7:' + project["support"]
+    compile 'com.android.support:cardview-v7:' + project["support"]
+    compile 'com.android.support:design:' + project["support"]
+    apt 'org.androidannotations:androidannotations:' + project["androidannotations"]
+    compile 'org.androidannotations:androidannotations-api:' + project["androidannotations"]
+    compile 'com.nostra13.universalimageloader:universal-image-loader:' + project["UIL"]
+    compile 'com.squareup.okio:okio:' + project["okio"]
+
+    compile('com.squareup.okhttp:okhttp:' + project["okhttp"]) {
+        exclude group: 'com.squareup.okio', module: 'okio'
+    }
+    compile('de.greenrobot:eventbus:2.4.1') {
+        exclude group: 'com.android.support', module: 'support-v4'
+        exclude group: 'com.android.support', module: 'appcompat-v7'
+    }
+
+    apt 'com.bluelinelabs:logansquare-compiler:' + project["logansquare"]
+    compile 'com.bluelinelabs:logansquare:' + project["logansquare"]
+
+    compile 'io.reactivex:rxjava:' + project["rxjava"]
+    compile 'io.reactivex:rxandroid:' + project["rxandroid"]
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.10'
+}
