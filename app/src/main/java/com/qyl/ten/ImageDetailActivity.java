@@ -5,15 +5,10 @@ import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
 
-import com.kogitune.activity_transition.ActivityTransition;
-import com.kogitune.activity_transition.ExitActivityTransition;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.qyl.ten.model.Image;
 
 import org.androidannotations.annotations.AfterViews;
