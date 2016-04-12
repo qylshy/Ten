@@ -1,7 +1,6 @@
 package com.qyl.ten;
 
 import android.os.Build;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.transition.ChangeBounds;
