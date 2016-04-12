@@ -1,9 +1,15 @@
 package com.qyl.ten;
 
+import android.os.Build;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.transition.ChangeBounds;
+import android.transition.TransitionSet;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.Window;
 import android.widget.ImageView;
 
 import com.bluelinelabs.logansquare.LoganSquare;
@@ -13,41 +19,49 @@ import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
-import org.androidannotations.annotations.EActivity;
 
 import java.io.IOException;
 
 import rx.Observable;
 import rx.Observer;
-import rx.Scheduler;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends AppCompatActivity {
 
     private ImageView imageView;
 
+    private Image image;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if (Build.VERSION.SDK_INT >= 21) {
+            getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
+            getWindow().setExitTransition(new ChangeBounds());
+            getWindow().setSharedElementExitTransition(new TransitionSet());
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         imageView = (ImageView)findViewById(R.id.image);
 
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                getData();
-//            }
-//        }).start();
+                startActivity(ImageDetailActivity_.intent(getApplicationContext())
+                        .image(image)
+                        .get());
+            }
+        });
+
 
         Observable.create(new Observable.OnSubscribe<Image>() {
             @Override
             public void call(Subscriber<? super Image> subscriber) {
-                Image image = getData();
+                image = getData();
                 if (subscriber.isUnsubscribed())
                     return;
                 System.out.println("qqqqqqqq===call=" + image);
@@ -70,9 +84,8 @@ public class MainActivity extends ActionBarActivity {
                     @Override
                     public void onNext(Image image) {
                         System.out.println("qqqqqqqq===onNext=" + image);
-                        // http://api.shigeten.net/images/483640B2D27AE132B12DA53669C5E7D2.jpg
-                        ImageLoader.getInstance().displayImage(BuildConfig.API_HOST + image.getImage1(), imageView);
-                        //ImageLoader.getInstance().displayImage("http://api.shigeten.net/"+image.getImage1(), imageView);
+
+                        ImageLoader.getInstance().displayImage("http://api.shigeten.net/"+image.getImage1(), imageView);
                     }
                 });
     }
