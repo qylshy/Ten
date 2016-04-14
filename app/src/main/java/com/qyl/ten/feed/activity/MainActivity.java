@@ -1,19 +1,21 @@
-package com.qyl.ten;
+package com.qyl.ten.feed.activity;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.transition.ChangeBounds;
-import android.transition.TransitionSet;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.widget.ImageView;
 
 import com.bluelinelabs.logansquare.LoganSquare;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.qyl.ten.model.Image;
+import com.bumptech.glide.Glide;
+import com.qyl.ten.BuildConfig;
+import com.qyl.ten.detail.actvity.ImageDetailActivity_;
+import com.qyl.ten.R;
+import com.qyl.ten.feed.entity.DiagramTimeLine;
+import com.qyl.ten.feed.entity.Image;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
@@ -34,13 +36,10 @@ public class MainActivity extends AppCompatActivity {
 
     private Image image;
 
+    //private SimpleDraweeView simpleDraweeView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if (Build.VERSION.SDK_INT >= 21) {
-            getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
-            getWindow().setExitTransition(new ChangeBounds());
-            getWindow().setSharedElementExitTransition(new TransitionSet());
-        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -50,11 +49,34 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                startActivity(ImageDetailActivity_.intent(getApplicationContext())
-                        .image(image)
-                        .get());
+                ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(MainActivity.this, imageView, "image_view");
+               // ActivityOptions activityOptions = ActivityOptions.makeSceneTransitionAnimation(MainActivity.this, imageView, "imageView");
+
+
+                if (Build.VERSION.SDK_INT > 16){
+                    startActivity(ImageDetailActivity_.intent(getApplicationContext())
+                            .image(image)
+                            .get(), optionsCompat.toBundle());
+                }
+
             }
         });
+
+//        simpleDraweeView = (SimpleDraweeView)findViewById(R.id.simple_drawee_view);
+//        simpleDraweeView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(MainActivity.this, simpleDraweeView, "simple");
+//                // ActivityOptions activityOptions = ActivityOptions.makeSceneTransitionAnimation(MainActivity.this, imageView, "imageView");
+//
+//
+//                if (Build.VERSION.SDK_INT > 16){
+//                    startActivity(ImageDetailActivity_.intent(getApplicationContext())
+//                            .image(image)
+//                            .get(), optionsCompat.toBundle());
+//                }
+//            }
+//        });
 
 
         Observable.create(new Observable.OnSubscribe<Image>() {
@@ -84,22 +106,34 @@ public class MainActivity extends AppCompatActivity {
                     public void onNext(Image image) {
                         System.out.println("qqqqqqqq===onNext=" + image);
 
-                        ImageLoader.getInstance().displayImage("http://api.shigeten.net/"+image.getImage1(), imageView);
+                        Glide.with(getApplicationContext()).load(BuildConfig.API_HOST + image.getImage1()).into(imageView);
+                        //imageView.setImageResource(R.mipmap.ic_launcher);
+                        //simpleDraweeView.setImageURI(Uri.parse(BuildConfig.API_HOST + image.getImage1()));
+                        //ImageLoader.getInstance().displayImage("http://api.shigeten.net/" + image.getImage1(), imageView);
+
                     }
                 });
     }
 
     private Image getData() {
+
+        //
+        // http://api.shigeten.net/api/Diagram/GetDiagramList
+        //
+
         try {
             OkHttpClient okHttpClient = new OkHttpClient();
             Request request = new Request.Builder()
-                    .url("http://api.shigeten.net/api/Diagram/GetDiagramContent?id=10475")
+                    .url("http://api.shigeten.net/api/Diagram/GetDiagramList")
+                    //.url("http://api.shigeten.net/api/Diagram/GetDiagramContent?id=10475")
                     .build();
             Response response= okHttpClient.newCall(request).execute();
             if (response.isSuccessful()){
-                Image.Pojo pojo = LoganSquare.parse(response.body().byteStream(), Image.Pojo.class);
-                Image image = Image.valueOf(pojo);
-                System.out.println("qqqqqqq====" + image.toString());
+                DiagramTimeLine timeLine = LoganSquare.parse(response.body().byteStream(), DiagramTimeLine.class);
+//                Image.Pojo pojo = LoganSquare.parse(response.body().byteStream(), Image.Pojo.class);
+//                Image image = Image.valueOf(pojo);
+//                System.out.println("qqqqqqq====" + image.toString());
+                System.out.println("qqqqqq======"+ timeLine.result.get(0));
                 //System.out.println("qqqqqqqq====" +response.body().string());
                 return image;
             }else {
@@ -133,5 +167,14 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if (Build.VERSION.SDK_INT >= 21){
+            finishAfterTransition();
+        }
+
     }
 }

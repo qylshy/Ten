@@ -1,4 +1,4 @@
-package com.qyl.ten.model;
+package com.qyl.ten.feed.entity;
 
 import android.os.Parcel;
 import android.os.Parcelable;

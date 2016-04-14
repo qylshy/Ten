@@ -87,6 +87,10 @@ dependencies {
 
     //prelollipoptransition
     //compile 'com.kogitune:pre-lollipop-activity-transition:1.3.0'
+
+    compile 'com.facebook.fresco:fresco:0.9.0+'
+
+    compile 'com.github.bumptech.glide:glide:3.5.2'
 }
 
 task wrapper(type: Wrapper) {
