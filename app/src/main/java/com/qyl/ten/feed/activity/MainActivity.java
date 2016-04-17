@@ -3,6 +3,8 @@ package com.qyl.ten.feed.activity;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,6 +18,7 @@ import com.qyl.ten.detail.actvity.ImageDetailActivity_;
 import com.qyl.ten.R;
 import com.qyl.ten.feed.entity.DiagramTimeLine;
 import com.qyl.ten.feed.entity.Image;
+import com.qyl.ten.feed.fragment.FeedFragment;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
@@ -35,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
     private ImageView imageView;
 
     private Image image;
+
+    private Fragment feedFragment;
 
     //private SimpleDraweeView simpleDraweeView;
 
@@ -78,41 +83,44 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        });
 
+        feedFragment = new FeedFragment();
+        initFragment(R.id.fragment, feedFragment);
 
-        Observable.create(new Observable.OnSubscribe<Image>() {
-            @Override
-            public void call(Subscriber<? super Image> subscriber) {
-                image = getData();
-                if (subscriber.isUnsubscribed())
-                    return;
-                System.out.println("qqqqqqqq===call=" + image);
-                subscriber.onNext(image);
-                subscriber.onCompleted();
-            }
-        }).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<Image>() {
-                    @Override
-                    public void onCompleted() {
-                        System.out.println("qqqqqqqq===onCompleted=");
-                    }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        System.out.println("qqqqqqqq===onError=" + e.getMessage());
-                    }
-
-                    @Override
-                    public void onNext(Image image) {
-                        System.out.println("qqqqqqqq===onNext=" + image);
-
-                        Glide.with(getApplicationContext()).load(BuildConfig.API_HOST + image.getImage1()).into(imageView);
-                        //imageView.setImageResource(R.mipmap.ic_launcher);
-                        //simpleDraweeView.setImageURI(Uri.parse(BuildConfig.API_HOST + image.getImage1()));
-                        //ImageLoader.getInstance().displayImage("http://api.shigeten.net/" + image.getImage1(), imageView);
-
-                    }
-                });
+//        Observable.create(new Observable.OnSubscribe<Image>() {
+//            @Override
+//            public void call(Subscriber<? super Image> subscriber) {
+//                image = getData();
+//                if (subscriber.isUnsubscribed())
+//                    return;
+//                System.out.println("qqqqqqqq===call=" + image);
+//                subscriber.onNext(image);
+//                subscriber.onCompleted();
+//            }
+//        }).subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new Observer<Image>() {
+//                    @Override
+//                    public void onCompleted() {
+//                        System.out.println("qqqqqqqq===onCompleted=");
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable e) {
+//                        System.out.println("qqqqqqqq===onError=" + e.getMessage());
+//                    }
+//
+//                    @Override
+//                    public void onNext(Image image) {
+//                        System.out.println("qqqqqqqq===onNext=" + image);
+//
+//                        Glide.with(getApplicationContext()).load(BuildConfig.API_HOST + image.getImage1()).into(imageView);
+//                        //imageView.setImageResource(R.mipmap.ic_launcher);
+//                        //simpleDraweeView.setImageURI(Uri.parse(BuildConfig.API_HOST + image.getImage1()));
+//                        //ImageLoader.getInstance().displayImage("http://api.shigeten.net/" + image.getImage1(), imageView);
+//
+//                    }
+//                });
     }
 
     private Image getData() {
@@ -176,5 +184,13 @@ public class MainActivity extends AppCompatActivity {
             finishAfterTransition();
         }
 
+    }
+
+    protected void initFragment(int container, Fragment fragment) {
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(container, fragment);
+        ft.setTransition(FragmentTransaction.TRANSIT_NONE);
+        ft.addToBackStack(null);
+        ft.commit();
     }
 }
