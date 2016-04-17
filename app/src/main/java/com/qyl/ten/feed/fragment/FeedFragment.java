@@ -32,6 +32,7 @@ public class FeedFragment extends PullToRefreshFragment {
     private static final String TAG = FeedFragment.class.getSimpleName();
 
     private boolean isLoading = false;
+    private boolean isloadEnd = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -50,27 +51,14 @@ public class FeedFragment extends PullToRefreshFragment {
     }
 
     @Override
-    protected void onLayoutRefresh() {
-        setRefreshing(true);
-        if (isNeedAutoRefresh) {
-            swipeRefreshLayout.setEntryAutoRefresh();
-            isNeedAutoRefresh = false;
-        }
-    }
-
-    @Override
-    protected boolean onLoadMore() {
-        return !isLoadEnd;
-    }
-
-    @Override
     protected void scrollToEnd() {
-
+        isLoadEnd = true;
+        System.out.println(TAG + "qqqqqqq=====scrollToEnd==");
     }
 
     @Override
     protected void loadMore() {
-        if (isLoading) {
+        if (isLoading || isLoadEnd) {
             return;
         }
 

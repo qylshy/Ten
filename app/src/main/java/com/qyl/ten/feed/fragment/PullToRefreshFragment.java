@@ -38,19 +38,15 @@ public abstract class PullToRefreshFragment extends BaseFragment {
         @Override
         public void onLoadMore(int page, int totalItemsCount) {
             loadMore();
-
-            //onLoadMoreInternal();
         }
 
         @Override
         public void onFirstVisibleItem(int index) {
-            //System.out.println(TAG + "==onFirstVisibleItem=" + index);
         }
 
         @Override
         public void onLoadEnd(boolean status) {
-            System.out.println("wwwwwwww====onLoadEnd=" + status );
-            if (status && isLoadEnd) {
+            if (status) {
                 scrollToEnd();
             }
         }
@@ -88,7 +84,6 @@ public abstract class PullToRefreshFragment extends BaseFragment {
             @Override
             public void onRefresh() {
                 loadMore();
-                System.out.println(TAG + "===onRefresh");
             }
         });
         swipeRefreshLayout.setScrollUpChild(getRecyclerView());
@@ -111,12 +106,6 @@ public abstract class PullToRefreshFragment extends BaseFragment {
         return recyclerView;
     }
 
-    private void onLoadMoreInternal() {
-        if (onLoadMore()) {
-            loadMore();
-        }
-    }
-
     protected void refreshInternal() {
         onLayoutRefresh();
         loadMore();
@@ -126,9 +115,13 @@ public abstract class PullToRefreshFragment extends BaseFragment {
         swipeRefreshLayout.setRefreshing(value);
     }
 
-    abstract protected void onLayoutRefresh();
-
-    abstract protected boolean onLoadMore();
+    protected void onLayoutRefresh(){
+        setRefreshing(true);
+        if (isNeedAutoRefresh) {
+            swipeRefreshLayout.setEntryAutoRefresh();
+            isNeedAutoRefresh = false;
+        }
+    }
 
     abstract protected void loadMore();
 
