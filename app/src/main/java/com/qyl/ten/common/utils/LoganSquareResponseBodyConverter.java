@@ -19,7 +19,6 @@ public class LoganSquareResponseBodyConverter<T> implements Converter<ResponseBo
 
 
     public LoganSquareResponseBodyConverter(Class<T> aClass){
-        System.out.println("1111111===构造器"+ aClass.getSimpleName());
         this.cls = aClass;
     }
 
@@ -29,16 +28,5 @@ public class LoganSquareResponseBodyConverter<T> implements Converter<ResponseBo
         T t = LoganSquare.parse(value.byteStream(), cls);
         return t;
 
-//        T t = null;
-//        DiagramTimeLine diagramTimeLine = null;
-//        try {
-//            diagramTimeLine = LoganSquare.parse(value.byteStream(), DiagramTimeLine.class);
-//            System.out.println("111111===covert======"+ ",,"+ diagramTimeLine.toString());
-//        }catch (Exception e){
-//            System.out.println("1111==Exception==" + e.getMessage());
-//        }
-//
-//        //System.out.println("111111===covert---"+ t.getClass() + ",,"+ t.toString());
-//        return (T)diagramTimeLine;
     }
 }

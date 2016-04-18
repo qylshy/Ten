@@ -19,8 +19,6 @@ public class LoganSquareConvertFactory extends Converter.Factory {
 
     private LoganSquare loganSquare;
 
-    private TypeConverter adapter;
-
     public static LoganSquareConvertFactory create(){
         return create(new LoganSquare());
     }

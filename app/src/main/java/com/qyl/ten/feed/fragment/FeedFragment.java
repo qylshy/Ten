@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.bluelinelabs.logansquare.LoganSquare;
+import com.qyl.ten.common.data.remote.DiagramDataSource;
 import com.qyl.ten.detail.actvity.ImageDetailActivity_;
 import com.qyl.ten.feed.adapter.FeedAdapter;
 import com.qyl.ten.feed.entity.DiagramTimeLine;
@@ -33,6 +34,7 @@ public class FeedFragment extends PullToRefreshFragment {
 
     private boolean isLoading = false;
     private boolean isloadEnd = false;
+    private DiagramDataSource diagramDataSource;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -65,17 +67,11 @@ public class FeedFragment extends PullToRefreshFragment {
         isLoading = true;
 
         System.out.println(TAG + "==loadmore");
-        Observable.create(new Observable.OnSubscribe<DiagramTimeLine>() {
-            @Override
-            public void call(Subscriber<? super DiagramTimeLine> subscriber) {
-                DiagramTimeLine diagramTimeLine = getData();
-                if (subscriber.isUnsubscribed())
-                    return;
-                System.out.println("qqqqqqqq===call=" + diagramTimeLine);
-                subscriber.onNext(diagramTimeLine);
-                subscriber.onCompleted();
-            }
-        }).subscribeOn(Schedulers.io())
+        if (diagramDataSource == null){
+            diagramDataSource = DiagramDataSource.getInstance();
+        }
+        diagramDataSource.getFeedData()
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<DiagramTimeLine>() {
                     @Override
@@ -88,16 +84,15 @@ public class FeedFragment extends PullToRefreshFragment {
                     public void onError(Throwable e) {
                         isLoading = false;
                         setRefreshing(false);
-                        System.out.println(TAG +"====" + e.getMessage());
+                        System.out.println(TAG + "====" + e.getMessage());
                     }
 
                     @Override
                     public void onNext(DiagramTimeLine diagramTimeLine) {
                         System.out.println(TAG + "===" + diagramTimeLine.toString());
-                        ((FeedAdapter)adapter).update(diagramTimeLine.result);
+                        ((FeedAdapter) adapter).update(diagramTimeLine.result);
                     }
                 });
-
 
     }
 

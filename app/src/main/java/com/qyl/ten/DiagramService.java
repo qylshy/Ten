@@ -10,6 +10,10 @@ import rx.Observable;
  */
 public interface DiagramService {
 
+    //
+    // http://api.shigeten.net/api/Diagram/GetDiagramList
+    //
+
     @GET("/api/Diagram/GetDiagramList")
     Observable<DiagramTimeLine> getDiagramTimeLine();
 }

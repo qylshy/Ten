@@ -79,9 +79,6 @@ public abstract class EndlessRecyclerScrollListener extends RecyclerView.OnScrol
             mLastItemVisible = (totalItemCount > 0) && (firstVisibleItem + visibleItemCount >= totalItemCount - visibleThreshold);
         }
 
-        System.out.println("qqqqqqqq==firstVisibleItem=" + firstVisibleItem + ",mLastItemVisible==" +mLastItemVisible +",visibleItemCount=" + visibleItemCount+", totalItemCount==" +totalItemCount);
-        System.out.println("qqqqqqqqq==lastVisibleItem===" + lastVisibleItem);
-
         Log.d(TAG, String.format("firstVisibleItem: %s mLastItemVisible: %s visibleItemCount: %s totalItemCount: %s", firstVisibleItem, mLastItemVisible, visibleItemCount, totalItemCount));
 
 

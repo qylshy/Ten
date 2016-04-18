@@ -6,10 +6,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 
 import com.bluelinelabs.logansquare.LoganSquare;
-import com.bumptech.glide.Glide;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.qyl.ten.BuildConfig;
 import com.qyl.ten.R;
-import com.qyl.ten.feed.entity.DiagramTimeLine;
 import com.qyl.ten.feed.entity.Image;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -94,10 +93,10 @@ public class ImageDetailActivity extends AppCompatActivity {
                     public void onNext(Image image) {
                         System.out.println("qqqqqqqq===onNext=" + image);
 
-                        Glide.with(getApplicationContext()).load(BuildConfig.API_HOST + image.getImage1()).into(imageView);
+                        //Glide.with(getApplicationContext()).load(BuildConfig.API_HOST + image.getImage1()).into(imageView);
                         //imageView.setImageResource(R.mipmap.ic_launcher);
                         //simpleDraweeView.setImageURI(Uri.parse(BuildConfig.API_HOST + image.getImage1()));
-                        //ImageLoader.getInstance().displayImage("http://api.shigeten.net/" + image.getImage1(), imageView);
+                        ImageLoader.getInstance().displayImage("http://api.shigeten.net/" + image.getImage1(), imageView);
 
                     }
                 });
