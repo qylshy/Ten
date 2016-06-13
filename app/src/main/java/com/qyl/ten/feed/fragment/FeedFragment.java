@@ -8,20 +8,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import com.bluelinelabs.logansquare.LoganSquare;
 import com.qyl.ten.common.data.remote.DiagramDataSource;
 import com.qyl.ten.detail.actvity.ImageDetailActivity_;
 import com.qyl.ten.feed.adapter.FeedAdapter;
 import com.qyl.ten.feed.entity.DiagramTimeLine;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
-
-import java.io.IOException;
-
-import rx.Observable;
 import rx.Observer;
-import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -106,35 +97,4 @@ public class FeedFragment extends PullToRefreshFragment {
         return new DefaultItemAnimator();
     }
 
-    private DiagramTimeLine getData() {
-
-        //
-        // http://api.shigeten.net/api/Diagram/GetDiagramList
-        //
-
-        try {
-            OkHttpClient okHttpClient = new OkHttpClient();
-            Request request = new Request.Builder()
-                    .url("http://api.shigeten.net/api/Diagram/GetDiagramList")
-                            //.url("http://api.shigeten.net/api/Diagram/GetDiagramContent?id=10475")
-                    .build();
-            Response response= okHttpClient.newCall(request).execute();
-            if (response.isSuccessful()){
-                DiagramTimeLine timeLine = LoganSquare.parse(response.body().byteStream(), DiagramTimeLine.class);
-//                Image.Pojo pojo = LoganSquare.parse(response.body().byteStream(), Image.Pojo.class);
-//                Image image = Image.valueOf(pojo);
-//                System.out.println("qqqqqqq====" + image.toString());
-                System.out.println("qqqqqq======"+ timeLine.result.get(0));
-                //System.out.println("qqqqqqqq====" +response.body().string());
-                return timeLine;
-            }else {
-                throw new IOException("Unexpected code " + response);
-            }
-        }catch (Exception e){
-            System.out.println("qqqqqqqq==" + e.getMessage());
-            e.printStackTrace();
-        }
-        return null;
-
-    }
 }
