@@ -3,6 +3,7 @@ package com.qyl.ten.detail.actvity;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.ImageView;
 
 import com.bluelinelabs.logansquare.LoganSquare;
@@ -21,6 +22,8 @@ import org.androidannotations.annotations.ViewById;
 
 import java.io.IOException;
 
+import qyl.com.common.log.LogConfig;
+import qyl.com.common.log.LogUtil;
 import rx.Observable;
 import rx.Observer;
 import rx.Subscriber;
@@ -32,6 +35,7 @@ import rx.schedulers.Schedulers;
  */
 @EActivity(R.layout.activity_detail)
 public class ImageDetailActivity extends AppCompatActivity {
+    private static final String TAG = ImageDetailActivity.class.getSimpleName();
 
     @ViewById(R.id.image)
     protected ImageView imageView;
@@ -53,6 +57,10 @@ public class ImageDetailActivity extends AppCompatActivity {
 //        }
         super.onCreate(savedInstanceState);
 
+        LogUtil.v(TAG, "onCreate");
+        LogUtil.v(TAG, "imageView clicked");
+        LogUtil.v("hhhhh", "hhhhhh");
+
     }
 
     @AfterViews
@@ -73,6 +81,8 @@ public class ImageDetailActivity extends AppCompatActivity {
                 if (subscriber.isUnsubscribed())
                     return;
                 System.out.println("qqqqqqqq===call=" + image);
+                LogUtil.i(TAG, image.toString());
+                LogUtil.debug("1112222");
                 subscriber.onNext(image);
                 subscriber.onCompleted();
             }

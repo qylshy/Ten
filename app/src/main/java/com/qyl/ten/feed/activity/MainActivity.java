@@ -6,6 +6,7 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,6 +29,7 @@ import com.squareup.okhttp.Response;
 
 import java.io.IOException;
 
+import qyl.com.common.log.LogUtil;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import rx.Observer;
@@ -36,6 +38,7 @@ import rx.schedulers.Schedulers;
 
 
 public class MainActivity extends AppCompatActivity {
+    private static final String TAG = MainActivity.class.getSimpleName();
 
     private ImageView imageView;
 
@@ -51,6 +54,15 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         imageView = (ImageView)findViewById(R.id.image);
+        LogUtil.v(TAG, "onCreate");
+        LogUtil.v(TAG, "imageView clicked");
+        LogUtil.v("hhhhh", "hhhhhh");
+
+        try {
+            int i = 5 / 0;
+        }catch (Exception e){
+            //LogUtil.e(TAG, "5/0", e);
+        }
 
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override

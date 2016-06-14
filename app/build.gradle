@@ -104,6 +104,8 @@ dependencies {
     compile 'com.squareup.retrofit2:retrofit:2.0.2'
     compile 'com.squareup.retrofit2:adapter-rxjava:2.0.2'
 
+    compile project(':common')
+
 }
 
 task wrapper(type: Wrapper) {

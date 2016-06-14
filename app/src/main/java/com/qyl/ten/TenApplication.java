@@ -8,6 +8,9 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 
+import qyl.com.common.log.LogConfig;
+import qyl.com.common.log.LogUtil;
+
 /**
  * Created by qiuyunlong on 16/4/5.
  */
@@ -29,5 +32,13 @@ public class TenApplication extends Application {
         ImageLoader.getInstance().init(config.build());
 
         Fresco.initialize(this);
+
+        LogConfig logConfig = new LogConfig.Builder(getApplicationContext())
+                .setLogLevel(LogUtil.VERBOSE)
+                .dirPath("/ten")
+                .setNeedSaveToFile(true)
+                .addTag("MainActivity")
+                .build();
+        LogUtil.init(logConfig);
     }
 }
